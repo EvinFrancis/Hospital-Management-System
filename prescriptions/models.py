@@ -1,3 +1,10 @@
 from django.db import models
+from appointments.models import Appointment
 
-# Create your models here.
+class Prescription(models.Model):
+
+    appointment = models.ForeignKey(Appointment,on_delete=models.CASCADE)
+
+    medicine = models.TextField()
+    dosage = models.CharField(max_length=100)
+    notes = models.TextField()

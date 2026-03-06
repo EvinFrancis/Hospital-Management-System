@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
 	<link rel="stylesheet" href="{% static 'assets/css/ready.css' %}">
 	<link rel="stylesheet" href="{% static 'assets/css/demo.css' %}">
+	<link rel='icon' type='image/x-icon' href="{% static 'assets/img/logo.png' %}" />
 </head>
 <body>
 	<div class="wrapper">
@@ -139,8 +140,10 @@
 						<div class="info">
 							<a class="" data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 								<span>
-									Hizrian
-									<span class="user-level">Administrator</span>
+									Hizria
+									<span class="user-level">Administrator1
+
+									</span>
 									<span class="caret"></span>
 								</span>
 							</a>
@@ -150,30 +153,37 @@
 								<ul class="nav">
 									<li>
 										<a href="#profile">
-											<span class="link-collapse">My Profile</span>
+											<span class="link-collapse">Dashboard</span>
 										</a>
 									</li>
 									<li>
 										<a href="#edit">
-											<span class="link-collapse">Edit Profile</span>
+											<span class="link-collapse">Doctors</span>
 										</a>
 									</li>
 									<li>
 										<a href="#settings">
-											<span class="link-collapse">Settings</span>
+											<span class="link-collapse">patients</span>
+										</a>
+									</li>
+									<li>
+										<a href="#settings">
+											<span class="link-collapse">Appointments</span>
 										</a>
 									</li>
 								</ul>
 							</div>
 						</div>
 					</div>
-					<ul class="nav">
+					 <ul class="nav">
 						<li class="nav-item active">
 							<a href="index.html">
 								<i class="la la-dashboard"></i>
 								<p>Dashboard</p>
+								
 								<span class="badge badge-count">5</span>
 							</a>
+							
 						</li>
 						<li class="nav-item">
 							<a href="components.html">
@@ -222,7 +232,9 @@
 								<p>Update To Pro</p>
 							</button>
 						</li>
-					</ul>
+					</ul> 
+					{% comment %} seond option {% endcomment %}
+					
 				</div>
 			</div>
 			<div class="main-panel">
@@ -382,8 +394,8 @@
 									</div>
 								</div>
 							</div> -->
-						</div>
-						<div class="row">
+						{% comment %} </div> {% endcomment %}
+						{% comment %} <div class="row">
 							<div class="col-md-3">
 								<div class="card">
 									<div class="card-header">
@@ -414,8 +426,8 @@
 									</div>
 								</div>
 							</div>
-						</div>
-						<div class="row row-card-no-pd">
+						</div> {% endcomment %}
+						{% comment %} <div class="row row-card-no-pd">
 							<div class="col-md-4">
 								<div class="card">
 									<div class="card-body">
@@ -507,8 +519,8 @@
 									</div>
 								</div>
 							</div>
-						</div>
-						<div class="row">
+						</div> {% endcomment %}
+						{% comment %} <div class="row">
 							<div class="col-md-4">
 								<div class="card">
 									<div class="card-header">
@@ -690,9 +702,9 @@
 											<i class="now-ui-icons loader_refresh spin"></i> Updated 3 minutes ago
 										</div>
 									</div>
-								</div>
+								</div>{% endcomment %}
 							</div>
-						</div>
+						</div> 
 					</div>
 				</div>
 				<footer class="footer">
