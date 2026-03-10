@@ -1,0 +1,51 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<form method="POST" >
+{% csrf_token %}
+<div  style="width:500px ; margin:auto ; padding-top:100px;margin-left:500px">
+
+<div class="form-group">
+<label>Doctor Name</label>
+<input type="text" name="name" class="form-control" required>
+</div>
+
+<br>
+
+<div class="form-group">
+<label>Department</label>
+<input type="text" name="department" class="form-control" required>
+</div>
+
+<br>
+
+<div class="form-group">
+<label>Phone</label>
+<input type="text" name="phone" class="form-control" required>
+</div>
+
+<br>
+
+<div class="form-group">
+<label>Email</label>
+<input type="email" name="email" class="form-control">
+</div>
+<div class="form-group">
+<label>Doctor Image</label>
+<input type="file" name="image" class="form-control">
+</div>
+
+<br>
+
+<button type="submit" class="btn btn-primary">
+Add Doctor
+</button>
+
+<a href="{% url 'view_doctors' %}" class="btn btn-secondary">
+View Doctors
+</a>
+
+</form>
+</div>
+
+{% endblock %}

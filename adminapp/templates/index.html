@@ -106,7 +106,7 @@
 							</ul>
 						</li>
 						<li class="nav-item dropdown">
-							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false"> <img src="assets/img/profile.jpg" alt="user-img" width="36" class="img-circle"><span >{{ request.user.username }}</span></span> </a>
+							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false"> <img src="{% static 'assets/img/logo.png' %}" alt="user-img" width="36" class="img-circle"><span >{{ request.user.username }}</span></span> </a>
 							<ul class="dropdown-menu dropdown-user">
 								<li>
 									<div class="user-box">
@@ -123,7 +123,7 @@
 									<div class="dropdown-divider"></div>
 									<a class="dropdown-item" href="#"><i class="ti-settings"></i> Account Setting</a>
 									<div class="dropdown-divider"></div>
-									<a class="dropdown-item" href="#"><i class="fa fa-power-off"></i> Logout</a>
+									<a class="dropdown-item" href="{% url 'admin_logout' %}"><i class="fa fa-power-off"></i> Logout</a>
 								</ul>
 								<!-- /.dropdown-user -->
 							</li>
@@ -157,13 +157,13 @@
 										</a>
 									</li>
 									<li>
-										<a href="#edit">
+										<a href="{% url 'view_doctors' %}">
 											<span class="link-collapse">Doctors</span>
 										</a>
 									</li>
 									<li>
 										<a href="#settings">
-											<span class="link-collapse">patients</span>
+											<span class="link-collapse">Departments</span>
 										</a>
 									</li>
 									<li>
@@ -186,16 +186,16 @@
 							
 						</li>
 						<li class="nav-item">
-							<a href="components.html">
+							<a href="{% url 'view_doctors' %}">
 								<i class="la la-table"></i>
-								<p>Components</p>
+								<p>Docotors Page</p>
 								<span class="badge badge-count">14</span>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="forms.html">
+							<a href="{% url 'view_departments' %}">
 								<i class="la la-keyboard-o"></i>
-								<p>Forms</p>
+								<p>Department</p>
 								<span class="badge badge-count">50</span>
 							</a>
 						</li>
@@ -226,17 +226,18 @@
 								<p>Icons</p>
 							</a>
 						</li>
-						<li class="nav-item update-pro">
-							<button  data-toggle="modal" data-target="#modalUpdate">
-								<i class="la la-hand-pointer-o"></i>
-								<p>Update To Pro</p>
-							</button>
-						</li>
+						
 					</ul> 
 					{% comment %} seond option {% endcomment %}
 					
 				</div>
 			</div>
+
+			{% comment %} nblock conet {% endcomment %}
+
+			{% block content %}
+
+
 			<div class="main-panel">
 				<div class="content">
 					<div class="container-fluid">
@@ -713,7 +714,7 @@
 							<ul class="nav">
 								<li class="nav-item">
 									<a class="nav-link" href="http://www.themekita.com">
-										ThemeKita
+										Prime Care
 									</a>
 								</li>
 								<li class="nav-item">
@@ -729,7 +730,7 @@
 							</ul>
 						</nav>
 						<div class="copyright ml-auto">
-							2018, made with <i class="la la-heart heart text-danger"></i> by <a href="http://www.themekita.com">ThemeKita</a>
+							2026 made with <i class="la la-heart heart text-danger"></i> by <a href="http://www.themekita.com">Prime Care</a>
 						</div>				
 					</div>
 				</footer>
@@ -737,26 +738,21 @@
 		</div>
 	</div>
 	<!-- Modal -->
-	<div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="modalUpdatePro" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-header bg-primary">
-					<h6 class="modal-title"><i class="la la-frown-o"></i> Under Development</h6>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body text-center">									
-					<p>Currently the pro version of the <b>Ready Dashboard</b> Bootstrap is in progress development</p>
-					<p>
-						<b>We'll let you know when it's done</b></p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
+	
+	{% endblock %}
+
+	{% if messages %}
+{% for message in messages %}
+<script>
+Swal.fire({
+    title: "Success",
+    text: "{{ message }}",
+    icon: "success",
+    confirmButtonText: "OK"
+});
+</script>
+{% endfor %}
+{% endif %}
 </body>
 <script src="{% static 'assets/js/core/jquery.3.2.1.min.js' %}"></script>
 <script src="{% static 'assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js' %}"></script>
@@ -764,7 +760,7 @@
 <script src="{% static 'assets/js/core/bootstrap.min.js' %}"></script>
 <script src="{% static 'assets/js/plugin/chartist/chartist.min.js' %}"></script>
 <script src="{% static 'assets/js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js' %}"></script>
-<script src="{% static 'assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js' %}"></script>
+{% comment %} <script src="{% static 'assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js' %}"></script> {% endcomment %}
 <script src="{% static 'assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js' %}"></script>
 <script src="{% static 'assets/js/plugin/jquery-mapael/jquery.mapael.min.js' %}"></script>
 <script src="{% static 'assets/js/plugin/jquery-mapael/maps/world_countries.min.js' %}"></script>
@@ -772,4 +768,32 @@
 <script src="{% static 'assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js' %}"></script>
 <script src="{% static 'assets/js/ready.min.js' %}"></script>
 <script src="{% static 'assets/js/demo.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+ {% if messages %}
+  {% for msg in messages %}
+     {% if msg.tags == 'success' %}
+     <script>
+     swal("{{msg}}",' ', "success");
+     </script>
+     
+     {% endif %}
+     {% if msg.tags == 'error' %}
+     <script>
+     swal("{{msg}}",' ', "error");
+     </script>
+     
+     {% endif %}
+     {% if msg.tags == 'warning' %}
+     <script>
+     swal("{{msg}}",' ', "warning");
+     </script>
+     
+     {% endif %}
+  {% endfor %}
+{% endif %}
+
+
+
 </html>
