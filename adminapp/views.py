@@ -3,7 +3,8 @@ from doctors.models import Doctor
 from patients.models import Patient
 from appointments.models import Appointment
 from django.contrib.auth import authenticate,login
-from django.contrib.auth.models import User
+
+from accounts.models import User
 
 
 # Create your views here.
