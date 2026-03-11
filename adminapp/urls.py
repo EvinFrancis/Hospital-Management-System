@@ -9,4 +9,9 @@ urlpatterns = [
     path("view_doctors",views.view_doctors,name="view_doctors"),
     path("view_departments",views.view_departments,name="view_departments"),
     path("save_department",views.save_department,name="save_department"),
+    path("save_doctors",views.save_doctors,name="save_doctors"),
+    path('doctor_list', views.doctor_list, name='doctor_list'),
+    path('verify_otp/',views.verify_otp,name='otp_page'),
+    path('delete_doctor/<int:doc_id>/',views.delete_doctor,name='delete_doctor'),
+
 ]

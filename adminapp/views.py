@@ -5,8 +5,9 @@ from django.contrib import messages
 
 from django.contrib.auth.models import User
 from adminapp.models import *
-
-
+from django.core.mail import send_mail
+from django.conf import settings
+import random
 
 # Create your views here.
 def admin_page(request):
@@ -25,34 +26,125 @@ def admin_login(request):
         password = request.POST['password']
         
 
-
     if User.objects.filter(username__contains=username).exists():
 
         user=authenticate(request, username=username, password=password)
         if user is not None and  user:
-            login(request, user)
+            otp = random.randint(100000,999999)
+
+            
+            
             request.session['username'] = username
             request.session['password'] = password
-            messages.success(request, "Login successful")
-            return redirect(admin_page)
+            request.session['otp'] = otp
+            request.session['username'] = username
+            send_mail(
+                'Admin Login Alert',
+                f'Admin {username} has logged into the Hospital Management System.Admin Login OTP ,\n\n  ---Your OTP for admin login is {otp}',
+                settings.EMAIL_HOST_USER,
+                ['evinfrancisvastgcsj@gmail.com'],
+                fail_silently=False,
+            )
+            
+            return redirect(verify_otp)
 
             
         else:
             messages.error(request, "Invalid login credentials")
-            return redirect(admin_loginpage)
+        return redirect(admin_loginpage)
+
+#otp section
+from django.contrib.auth import login
+from django.contrib.auth.models import User
+
+def verify_otp(request):
+
+    if request.method == "POST":
+
+        user_otp = request.POST.get('otp')
+        session_otp = request.session.get('otp')
+
+        if str(user_otp) == str(session_otp):
+
+            username = request.session.get('username')
+            user = User.objects.get(username=username)
+
+            login(request,user)
+            messages.success(request, "OTP Verified Successfully ✅")
+
+            return redirect('admin_page')
+
+        else:
+            messages.error(request, "Invalid OTP ❌")
+
+            return render(request,'otp_page.html',{'error':'Invalid OTP'})
+
+    return render(request,'otp_page.html')
         
+
+
+#admin logout
+
 def admin_logout(request):
+    username = request.session.get('username')
+
+    if not username:
+       return redirect(admin_loginpage)
     del request.session['username']
     del request.session['password']
+    
     return redirect(admin_loginpage)
 
 
 # doctor page
 
 def view_doctors(request):
-    return render(request,'Doctor_section.html')
+    departments = departmentdb.objects.all()
+    doctors = doctordb.objects.all()
+    return render(request,'Doctor_section.html',{'departments':departments,
+                                                'doctor':doctor})
+
+#show add doctors
+def doctor_list(request):
+    doctors = doctordb.objects.all()
+    return render(request, "view_doctor.html", {"doctors": doctors})
 
 #svae doctors
+def save_doctors(request):
+    if request.method == "POST":
+
+        doc_name = request.POST.get('name')
+        doc_dept = request.POST.get('department')
+        doc_phn = request.POST.get('phone')
+        doc_email = request.POST.get('email')
+        doc_image = request.FILES.get('image')
+        doc_quali = request.POST.get('doc_quali')
+
+        doctordb.objects.create(
+            doc_name=doc_name,
+            doc_dpt=doc_dept,
+            doc_phone=doc_phn,
+            doc_email=doc_email,
+            doc_image=doc_image,
+            doc_quali=doc_quali
+
+        )
+
+        messages.success(request, "Doctor Added Successfully ✅")
+         # Send email to doctor
+        send_mail(
+            'Welcome to PrimeCare Medical Institute',
+            f'Dear Dr. {doc_name},\n\nYou have been successfully added to the hospital system.\nDepartment: {doc_dept}\n\nThank you.',
+            settings.EMAIL_HOST_USER,
+            [doc_email],
+            fail_silently=False,
+        )
+
+        
+
+
+        return redirect(view_doctors)
+        
 
 
 
@@ -60,7 +152,8 @@ def view_doctors(request):
 #view department
 
 def view_departments(request):
-    return render(request,'department_section.html')
+    departments = departmentdb.objects.all()
+    return render(request,'department_section.html',{'departments':departments})
              
 
 #save deparrtment
@@ -85,6 +178,21 @@ def save_department(request):
 
         messages.success(request, "Department Added Successfully ✅")
 
+        
+
+
         return redirect(view_departments)
+
+
+#delete doctor
+
+def delete_doctor(request, doc_id):
+    doctor = doctordb.objects.get(id=doc_id)
+    doctor.delete()
+    messages.success(request, "Doctor Deleted Successfully ✅")
+    return redirect(doctor_list)
+    
+
+
        
 

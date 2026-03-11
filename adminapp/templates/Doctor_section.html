@@ -1,9 +1,34 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<form method="POST" >
+
+<style>
+.doctor-box{
+    width:500px;
+    margin:auto;
+    margin-top:8px;
+    padding:30px;
+    background:#ffffff;
+    border-radius:10px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+
+.doctor-title{
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+</style>
+
+<div class="doctor-box">
+
+<div class="doctor-title">
+Add Doctor
+</div>
+
+<form method="POST" enctype="multipart/form-data" action="{% url 'save_doctors' %}">
 {% csrf_token %}
-<div  style="width:500px ; margin:auto ; padding-top:100px;margin-left:500px">
 
 <div class="form-group">
 <label>Doctor Name</label>
@@ -14,7 +39,16 @@
 
 <div class="form-group">
 <label>Department</label>
-<input type="text" name="department" class="form-control" required>
+{% comment %} <input type="text" name="department" class="form-control" required> {% endcomment %}
+
+<select class="form-control" name="department">
+<option>--Select--</option>
+{% for i in departments %}
+<option value="{{i.dpt_name}}">{{i.dpt_name}}</option>
+{% endfor %}
+
+
+</select>
 </div>
 
 <br>
@@ -30,6 +64,18 @@
 <label>Email</label>
 <input type="email" name="email" class="form-control">
 </div>
+
+<br>
+<div class="mb-3">
+                  <label class="form-label">Qualification</label>
+                  <textarea
+                    class="form-control"
+                    name="doc_quali"
+                    rows="3"
+                    placeholder="Enter Qualification"
+                  ></textarea>
+                </div>
+
 <div class="form-group">
 <label>Doctor Image</label>
 <input type="file" name="image" class="form-control">
@@ -41,11 +87,12 @@
 Add Doctor
 </button>
 
-<a href="{% url 'view_doctors' %}" class="btn btn-secondary">
+<a href="{% url 'doctor_list' %}" class="btn btn-secondary">
 View Doctors
 </a>
 
 </form>
+
 </div>
 
 {% endblock %}
