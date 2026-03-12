@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 
 from django.contrib.auth import authenticate,login
 from django.contrib import messages
@@ -102,7 +102,7 @@ def view_doctors(request):
     departments = departmentdb.objects.all()
     doctors = doctordb.objects.all()
     return render(request,'Doctor_section.html',{'departments':departments,
-                                                'doctor':doctor})
+                                                'doctor':doctors})
 
 #show add doctors
 def doctor_list(request):
@@ -192,6 +192,38 @@ def delete_doctor(request, doc_id):
     messages.success(request, "Doctor Deleted Successfully ✅")
     return redirect(doctor_list)
     
+
+#edit deoctor apge
+def edit_doctor_page(request, doc_id):
+    doctor = doctordb.objects.get(id=doc_id)
+    return render(request, 'edit_doctor.html', {'doctor': doctor})
+
+
+#edit docotr
+def update_doctor(request, doc_id):
+
+    doctor = get_object_or_404(doctordb, id=doc_id)
+    if request.method=="POST":
+        doc_name = request.POST.get('name')
+        doc_dept = request.POST.get('department')
+        doc_phn = request.POST.get('phone')
+        doc_email = request.POST.get('email')
+        if request.FILES.get('image'):
+            doc_image = request.FILES.get('image')
+        else:
+            doc_image = doctordb.objects.get(id=doc_id).doc_image
+        doc_quali = request.POST.get('doc_quali')
+        
+        doctordb.objects.filter(id=doc_id).update(
+            doc_name=doc_name,
+            doc_dpt=doc_dept,
+            doc_phone=doc_phn,
+            doc_email=doc_email,
+            doc_image=doc_image,
+            doc_quali=doc_quali )
+        messages.success(request, "Doctor Updated Successfully ✅")
+        return redirect(doctor_list)
+
 
 
        

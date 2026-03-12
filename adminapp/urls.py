@@ -13,5 +13,7 @@ urlpatterns = [
     path('doctor_list', views.doctor_list, name='doctor_list'),
     path('verify_otp/',views.verify_otp,name='otp_page'),
     path('delete_doctor/<int:doc_id>/',views.delete_doctor,name='delete_doctor'),
+    path('edit_doctor_page/<int:doc_id>/',views.edit_doctor_page,name='edit_doctor_page'),
+    path('update_doctor/<int:doc_id>/',views.update_doctor,name='update_doctor'),
 
 ]
