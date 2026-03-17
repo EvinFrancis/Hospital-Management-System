@@ -26,4 +26,4 @@ class doctordb(models.Model):
     doc_image = models.ImageField(upload_to='doctors/', blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return self.doc_name

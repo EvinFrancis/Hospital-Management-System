@@ -3,7 +3,7 @@ from adminapp import views
 urlpatterns = [
     
     path("admin_page/",views.admin_page,name="admin_page"),
-    path("",views.admin_loginpage,name="admin_loginpage"),
+    path("prime/",views.admin_loginpage,name="admin_loginpage"),
     path("admin_login",views.admin_login,name="admin_login"),
     path("admin_logout",views.admin_logout,name="admin_logout"),
     path("view_doctors",views.view_doctors,name="view_doctors"),

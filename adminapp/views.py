@@ -14,8 +14,11 @@ def admin_page(request):
     # doctors = Doctor.objects.count()
     # patients = Patient.objects.count()
     # appointments = Appointment.objects.count()
+    departments = departmentdb.objects.all()
+    doctors = doctordb.objects.all()
 
-    return render(request, 'index.html')
+    return render(request, 'index.html',{'departments':departments,
+                                                'doctor':doctors})
 
 def admin_loginpage(request):
     return render(request, 'admin_login_page.html')
@@ -102,7 +105,7 @@ def view_doctors(request):
     departments = departmentdb.objects.all()
     doctors = doctordb.objects.all()
     return render(request,'Doctor_section.html',{'departments':departments,
-                                                'doctor':doctors})
+                                                'doctors':doctors})
 
 #show add doctors
 def doctor_list(request):
