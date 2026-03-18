@@ -67,7 +67,7 @@
         <a href="index.html" class="logo d-flex align-items-center">
           <!-- Uncomment the line below if you also wish to use an image logo -->
           <!-- <img src="assets/img/logo.webp" alt=""> -->
-          <h1 class="sitename">Clinic</h1>
+          <h1 class="sitename">PRIME CARE HOSPITAL</h1>
         </a>
 
         <nav id="navmenu" class="navmenu">
@@ -117,6 +117,14 @@
     </div>
 
   </header>
+  {% comment %} //chatbot {% endcomment %}
+  <div id="chatbot" style="z-index:9999;color:white;font-size:18px; position:fixed;bottom:20px;right:20px;width:300px;background:#347bed;border-radius:10px;padding:10px;">
+    
+    <div id="chat-box" style="height:200px;overflow-y:auto;"></div>
+
+    <input type="text" id="userInput" placeholder="Ask..." style="width:70%;">
+    <button onclick="sendMessage()">Send</button>
+</div>
 {% block content %}
   <main class="main">
 
@@ -1080,6 +1088,26 @@
   <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
   <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
   <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  
+  <script>
+function sendMessage(){
+    let input = document.getElementById("userInput");
+    let message = input.value;
+
+    let chatBox = document.getElementById("chat-box");
+
+    chatBox.innerHTML += `<p><b>You:</b> ${message}</p>`;
+
+    fetch(`/ai_chatbot/?message=${message}`)
+    .then(res => res.json())
+    .then(data => {
+        chatBox.innerHTML += `<p><b>Bot:</b> ${data.reply}</p>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    input.value = "";
+}
+</script>
 
   <!-- Main JS File -->
   <script src="{% static 'assets/js/main.js' %}"></script>
