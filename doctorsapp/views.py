@@ -205,4 +205,29 @@ def verify_attendance(request, token):
     attendance.save()
 
     return redirect('view_attendance')   # or show error page
+
+
+#docotr appooinmets
+from userapp.models import *
+from django.utils import timezone
+
+def doctor_appointments(request):
+    doctor_name = request.session.get('username')
+
+    appointments = appointmentdb.objects.filter(
+        doctor=doctor_name
+    ).order_by('-date')
+
+
+    today = timezone.now().date()
+    today_appointments = appointmentdb.objects.filter(
+        doctor=doctor_name,
+        date=today
+    )
+
+    return render(request, 'appoinments_doc.html', {
+        'appointments': appointments,
+        'today_appointments': today_appointments
+
+    })
     

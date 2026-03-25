@@ -11,6 +11,7 @@ urlpatterns = [
     path('attendance_page/',views.attendance_page,name='attendance_page'),
     path('mark_attendance/', views.mark_attendance, name='mark_attendance'),
     path('verify-attendance/<uuid:token>/', views.verify_attendance, name='verify_attendance'),   
+    path('doctor_appointments/', views.doctor_appointments, name='doctor_appointments'),   
 
 
    

@@ -24,7 +24,7 @@
 
     {% for doctor in doctors %}
     <tr>
-        <td>{{ doctor.id }}</td>
+        <td>{{ forloop.counter }}</td>
         <td>{{ doctor.doc_name }}</td>
         <td>{{ doctor.doc_dpt }}</td>
         <td>{{ doctor.doc_phone }}</td>
