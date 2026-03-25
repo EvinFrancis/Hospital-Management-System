@@ -5,6 +5,7 @@ from django.contrib import messages
 
 from django.contrib.auth.models import User
 from adminapp.models import *
+from doctorsapp.models import *
 from django.core.mail import send_mail
 from django.conf import settings
 import random
@@ -89,7 +90,99 @@ def doctor_logout(request):
     
     return redirect(sigin_page)
 
-       
+
+def attendance_page(request):
+    doctor = doctordb.objects.get(doc_name=request.session['username'])
+
+    today = timezone.now()
     
-    
+    present = Attendance.objects.filter(
+        doctor=doctor,
+        date__month=today.month,
+        date__year=today.year,
+        status='Present'
+    ).count()
+
+    absent = 30 - present   # simple logic
+
+    return render(request, 'attendance_page.html', {
+        'doctor': doctor,
+        'present': present,
+        'absent': absent
+    })
+
+#qr email
+
+import uuid
+import qrcode
+from io import BytesIO
+from django.core.mail import EmailMessage
+from django.utils import timezone
+from django.shortcuts import redirect
+from .models import Attendance, doctordb
+from django.urls import reverse
+
+
+
+def mark_attendance(request):
+    if request.method == "POST":
+        doctor = doctordb.objects.get(doc_name=request.session['username'])
+        today = timezone.now().date()
+        print("Checking existing attendance...")
+        # prevent duplicate
+        # if Attendance.objects.filter(doctor=doctor, date=today).exists():
+        #     return redirect('attendance_page')
+
+        # create attendance
+        attendance = Attendance.objects.create(
+            doctor=doctor,
+            date=today,
+            status='Pending',
+            qr_token=uuid.uuid4()
+        )
+
+        # create QR URL
+        qr_url = request.build_absolute_uri(
+            reverse('verify_attendance', args=[attendance.qr_token])
+        )
+        print("QR URL:", qr_url)
+        # generate QR image
+        qr = qrcode.make(qr_url)
+        buffer = BytesIO()
+        qr.save(buffer, format='PNG')
+        print("Doctor email:", doctor.doc_email)
+        # send em  ail
+        email = EmailMessage(
+            subject="Your Attendance QR Code",
+            body="Scan this QR code to mark your attendance.",
+            to=[doctor.doc_email],
+
+        )
+
+        email.attach('qr.png', buffer.getvalue(), 'image/png')
+        email.send(  fail_silently=False)
+
+        return redirect('attendance_page')
+   
+
+#QR Verification View
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+
+from django.http import JsonResponse
+
+def verify_attendance(request, token):
+    attendance = get_object_or_404(Attendance, qr_token=token)
+
+    if attendance.status == 'Present':
+        return JsonResponse({'message': 'Already marked ✅'})
+
+    from django.utils import timezone
+    if attendance.date != timezone.now().date():
+        return JsonResponse({'message': 'QR expired ❌'})
+
+    attendance.status = 'Present'
+    attendance.save()
+
+    return JsonResponse({'message': 'Attendance Marked ✅'})
     

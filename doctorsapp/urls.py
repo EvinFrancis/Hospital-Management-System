@@ -8,6 +8,10 @@ urlpatterns = [
     path('doctor_page/',views.doctor_page,name="doctor_page"),
     path('doctor_logout/',views.doctor_logout,name="doctor_logout"),
     path('verify_otp/',views.verify_otp,name='otp_page'),
+    path('attendance_page/',views.attendance_page,name='attendance_page'),
+    path('mark_attendance/', views.mark_attendance, name='mark_attendance'),
+    path('verify-attendance/<uuid:token>/', views.verify_attendance, name='verify_attendance'),   
+
 
    
 ]

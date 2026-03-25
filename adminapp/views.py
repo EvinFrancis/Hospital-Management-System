@@ -27,6 +27,7 @@ def admin_login(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
+    
         
 
     if User.objects.filter(username__contains=username).exists():
@@ -132,6 +133,7 @@ def save_doctors(request):
             doc_quali=doc_quali
 
         )
+    
 
         messages.success(request, "Doctor Added Successfully ✅")
          # Send email to doctor
@@ -147,6 +149,9 @@ def save_doctors(request):
 
 
         return redirect(view_doctors)
+    
+
+   
         
 
 
@@ -229,5 +234,8 @@ def update_doctor(request, doc_id):
 
 
 
-       
+ #sanner pagee
+def scan_page(request):
+   
+    return render(request, 'scan-attendance.html')
 

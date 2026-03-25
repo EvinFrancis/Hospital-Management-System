@@ -118,14 +118,148 @@
 
   </header>
   {% comment %} //chatbot {% endcomment %}
-  <div id="chatbot" style="z-index:9999;color:white;font-size:18px; position:fixed;bottom:20px;right:20px;width:300px;background:#347bed;border-radius:10px;padding:10px;">
-    
-    <div id="chat-box" style="height:200px;overflow-y:auto;"></div>
+  
 
-    <input type="text" id="userInput" placeholder="Ask..." style="width:70%;">
-    <button onclick="sendMessage()">Send</button>
+<style>
+#chatbot {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 320px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+    z-index: 9999;
+}
+
+/* Header */
+#chat-header {
+    background: linear-gradient(135deg, #347bed, #5f9cff);
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Chat box */
+#chat-box {
+    height: 250px;
+    padding: 10px;
+    overflow-y: auto;
+    background: #f4f7fb;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Messages */
+.message {
+    padding: 8px 12px;
+    border-radius: 12px;
+    max-width: 75%;
+    font-size: 14px;
+}
+
+.user {
+    background: #347bed;
+    color: white;
+    align-self: flex-end;
+}
+
+.bot {
+    background: #e4e6eb;
+    color: black;
+    align-self: flex-start;
+}
+
+/* Input area */
+#chat-input-area {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    background: #fff;
+}
+
+#userInput {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+/* Button */
+#chat-input-area button {
+    margin-left: 8px;
+    background: #347bed;
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#chat-input-area button:hover {
+    background: #255ec7;
+}
+/* Hidden class */
+.hidden {
+  display: none;
+}
+#chat-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #347bed;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
+  cursor: pointer;
+  left: 20px;   /* 👈 change from right → left */
+  right: auto; 
+  z-index: 9999;
+}
+#chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#chat-close {
+  cursor: pointer;
+  font-size: 18px;
+}
+</style>
+
+{% comment %} end for chatbot  {% endcomment %}
 </div>
 {% block content %}
+<button id="chat-toggle" onclick="toggleChat()">💬</button>
+<div id="chatbot" class="hidden">
+
+  <div id="chat-header">
+     Chat Assistant
+    <span id="chat-close" onclick="closeChat()">✖</span>
+
+  </div>
+
+  <div id="chat-box"></div>
+
+  <div id="chat-input-area">
+    <input type="text" id="userInput" placeholder="Type your message..." />
+    <button onclick="sendMessage()">➤</button>
+  </div>
+
+</div>
+
+
   <main class="main">
 
     <!-- Hero Section -->
@@ -659,7 +793,7 @@
             </div>
             <div class="action-buttons">
               <a href="#!" class="btn-secondary">View Details</a>
-              <a href="#!" class="btn-primary">Book Now</a>
+              <a href="{% url 'appointment_page' %}" class="btn-primary">Book Now</a>
             </div>
           </div><!-- End Doctor Profile -->
 
@@ -1091,6 +1225,7 @@
   
   <script>
 function sendMessage(){
+  
     let input = document.getElementById("userInput");
     let message = input.value;
 
@@ -1106,6 +1241,20 @@ function sendMessage(){
     });
 
     input.value = "";
+}
+function toggleChat() {
+  const chat = document.getElementById("chatbot");
+  chat.classList.toggle("hidden");
+}
+/*  enter button */
+document.getElementById("userInput").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+function closeChat() {
+  document.getElementById("chatbot").classList.add("hidden");
 }
 </script>
 
