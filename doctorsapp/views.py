@@ -9,6 +9,7 @@ from doctorsapp.models import *
 from django.core.mail import send_mail
 from django.conf import settings
 import random
+from adminapp.views import *
 
 
 
@@ -94,7 +95,14 @@ def doctor_logout(request):
 def attendance_page(request):
     doctor = doctordb.objects.get(doc_name=request.session['username'])
 
-    today = timezone.now()
+    today = timezone.now().date()
+
+    # check today attendance
+    already_marked = Attendance.objects.filter(
+        doctor=doctor,
+        date=today
+    ).exists()
+
     
     present = Attendance.objects.filter(
         doctor=doctor,
@@ -108,7 +116,8 @@ def attendance_page(request):
     return render(request, 'attendance_page.html', {
         'doctor': doctor,
         'present': present,
-        'absent': absent
+        'absent': absent,
+        'already_marked': already_marked
     })
 
 #qr email
@@ -128,10 +137,12 @@ def mark_attendance(request):
     if request.method == "POST":
         doctor = doctordb.objects.get(doc_name=request.session['username'])
         today = timezone.now().date()
+        date_str = today.strftime("%d-%m-%Y")   # 25-03-2026
+        day_str = today.strftime("%A")  
         print("Checking existing attendance...")
         # prevent duplicate
-        # if Attendance.objects.filter(doctor=doctor, date=today).exists():
-        #     return redirect('attendance_page')
+        if Attendance.objects.filter(doctor=doctor, date=today).exists():
+             return redirect('attendance_page')
 
         # create attendance
         attendance = Attendance.objects.create(
@@ -154,7 +165,16 @@ def mark_attendance(request):
         # send em  ail
         email = EmailMessage(
             subject="Your Attendance QR Code",
-            body="Scan this QR code to mark your attendance.",
+            body=f"""
+Hello Doctor,
+
+Please scan the QR code to mark your attendance.
+
+📅 Date: {date_str}
+📆 Day: {day_str}
+
+Thank you.
+""",
             to=[doctor.doc_email],
 
         )
@@ -175,7 +195,7 @@ def verify_attendance(request, token):
     attendance = get_object_or_404(Attendance, qr_token=token)
 
     if attendance.status == 'Present':
-        return JsonResponse({'message': 'Already marked ✅'})
+        return redirect('view_attendance')   # ✅ redirect instead of JSON
 
     from django.utils import timezone
     if attendance.date != timezone.now().date():
@@ -184,5 +204,5 @@ def verify_attendance(request, token):
     attendance.status = 'Present'
     attendance.save()
 
-    return JsonResponse({'message': 'Attendance Marked ✅'})
+    return redirect('view_attendance')   # or show error page
     

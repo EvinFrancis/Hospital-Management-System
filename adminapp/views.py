@@ -16,9 +16,17 @@ def admin_page(request):
     # appointments = Appointment.objects.count()
     departments = departmentdb.objects.all()
     doctors = doctordb.objects.all()
+    attendances = Attendance.objects.all()
+     # count present & absent for today
+    present = attendances.filter(status='Present').count()
+    total = attendances.count()
+    absent = total - present
 
     return render(request, 'index.html',{'departments':departments,
-                                                'doctor':doctors})
+                                                'doctor':doctors,
+                                                'attendances': attendances
+                                                ,'present': present,
+        'absent': absent})
 
 def admin_loginpage(request):
     return render(request, 'admin_login_page.html')
@@ -238,4 +246,15 @@ def update_doctor(request, doc_id):
 def scan_page(request):
    
     return render(request, 'scan-attendance.html')
+
+from doctorsapp.models import *
+def view_attendance(request):
+    attendances = Attendance.objects.all()
+     # count present & absent for today
+    present = attendances.filter(status='Present').count()
+    total = attendances.count()
+    absent = total - present
+    return render(request, 'view_attend.html', {'attendances': attendances
+                                                ,'present': present,
+        'absent': absent})
 
