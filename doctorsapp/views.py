@@ -77,8 +77,12 @@ def verify_otp(request):
 def doctor_page(request):
     username = request.session.get('username')
     doctor = doctordb.objects.filter(doc_name=username).first()
+    
+    total_appointments = appointmentdb.objects.count()
 
-    return render(request, "doctor_page.html", {"username": username, "doctor": doctor})
+
+    return render(request, "doctor_page.html", {"username": username, "doctor": doctor
+                                                , "total_appointments": total_appointments})
 
 #doctor page logout
 def doctor_logout(request):
@@ -218,6 +222,7 @@ def doctor_appointments(request):
         doctor=doctor_name
     ).order_by('-date')
 
+    total_appointments = appointments.count()
 
     today = timezone.now().date()
     today_appointments = appointmentdb.objects.filter(
@@ -227,7 +232,8 @@ def doctor_appointments(request):
 
     return render(request, 'appoinments_doc.html', {
         'appointments': appointments,
-        'today_appointments': today_appointments
+        'today_appointments': today_appointments,
+        'total_appointments': total_appointments
 
     })
     
