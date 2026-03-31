@@ -226,3 +226,13 @@ def ai_chatbot(request):
         bot_reply = f"Error: {str(e)}"
 
     return JsonResponse({"reply": bot_reply})
+
+
+#about page view
+
+def about_page(request):
+    return render(request, "about_page.html")
+
+#contact page view
+def service_page(request):
+    return render(request, "service_page.html")
