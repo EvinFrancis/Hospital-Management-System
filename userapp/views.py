@@ -236,3 +236,7 @@ def about_page(request):
 #contact page view
 def service_page(request):
     return render(request, "service_page.html")
+
+
+def contact_page(request):
+    return render(request, "contact_page.html")

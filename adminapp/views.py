@@ -258,3 +258,40 @@ def view_attendance(request):
                                                 ,'present': present,
         'absent': absent})
 
+
+def view_department(request):
+    departments = departmentdb.objects.all()
+    return render(request, 'view_dep.html', {'departments': departments})
+
+#delete department
+
+def delete_department(request,idd):
+    department = departmentdb.objects.get(id=idd)
+    department.delete()
+    messages.success(request, "Department Deleted Successfully ✅")
+    return redirect(view_department)
+
+# update department
+def update_department(request,idd):
+    department = departmentdb.objects.get(id=idd)
+    if request.method=="POST":
+        dpt_name=request.POST.get("dpt_name")
+        dpt_des=request.POST.get("dpt_des")
+        dpt_phone=request.POST.get("dpt_phone")
+        dpt_email=request.POST.get("dpt_email")
+        if request.FILES.get('dpt_image'):
+            dpt_image=request.FILES.get('dpt_image')
+        else:
+            dpt_image=departmentdb.objects.get(id=idd).dpt_image
+        departmentdb.objects.filter(id=idd).update(
+            dpt_name=dpt_name,
+            dpt_des=dpt_des,
+            dpt_phone=dpt_phone,
+            dpt_email=dpt_email,
+            dpt_image=dpt_image
+        )
+        messages.success(request, "Department Updated Successfully ✅")
+        return redirect(view_department)
+
+    
+    return render(request, 'edit_department.html', {'department': department})

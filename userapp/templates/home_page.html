@@ -90,6 +90,8 @@
               <li><a href="404.html">404</a></li>
             </ul>
             </li>
+                        <li><a href="{% url 'contact_page' %}">Contact</a></li>
+
             <li class="dropdown"><a href="#"><span>Account Logins</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
                 {% comment %} <li><a href="#">Dropdown 1</a></li>
@@ -106,7 +108,6 @@
                     <li><a href="{% url 'doctor_login' %}">Doctors Login</a></li>
               </ul>
             </li>
-            <li><a href="contact.html">Contact</a></li>
           </ul>
           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
@@ -313,22 +314,11 @@
 
               <div class="hero-actions" data-aos="fade-right" data-aos-delay="600">
                 <a href="{% url 'appointment_page' %}" class="btn btn-primary">Book Appointment</a>
-                <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="btn btn-outline glightbox">
-                  <i class="bi bi-play-circle me-2"></i>
-                  Watch Our Story
-                </a>
+                
                 
               </div>
 
-              <div class="emergency-contact" data-aos="fade-right" data-aos-delay="700">
-                <div class="emergency-icon">
-                  <i class="bi bi-telephone-fill"></i>
-                </div>
-                <div class="emergency-info">
-                  <small>Emergency Hotline</small>
-                  <strong>+1 (555) 911-2468</strong>
-                </div>
-              </div>
+              
             </div>
           </div>
 
@@ -409,7 +399,7 @@
               </div>
 
               <div class="cta-section">
-                <a href="about.html" class="btn-primary">Learn More About Us</a>
+                <a href="{% url 'about_page' %}" class="btn-primary">Learn More About Us</a>
               </div>
             </div>
           </div>

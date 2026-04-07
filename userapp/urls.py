@@ -11,6 +11,7 @@ urlpatterns = [
     path('ai_chatbot/', views.ai_chatbot, name="ai_chatbot"),
     path('about_page/', views.about_page, name="about_page"),
     path('service_page/', views.service_page, name="service_page"),
+    path('contact_page/', views.contact_page, name="contact_page"),
 
 
 ]
