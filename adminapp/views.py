@@ -5,6 +5,8 @@ from django.contrib import messages
 
 from django.contrib.auth.models import User
 from adminapp.models import *
+from doctorsapp.models import *
+from userapp.models import *
 from django.core.mail import send_mail
 from django.conf import settings
 import random
@@ -21,12 +23,15 @@ def admin_page(request):
     present = attendances.filter(status='Present').count()
     total = attendances.count()
     absent = total - present
+    appn=appointmentdb.objects.count()
+
 
     return render(request, 'index.html',{'departments':departments,
                                                 'doctor':doctors,
                                                 'attendances': attendances
                                                 ,'present': present,
-        'absent': absent})
+        'absent': absent,
+        'appn':appn})
 
 def admin_loginpage(request):
     return render(request, 'admin_login_page.html')
@@ -113,13 +118,19 @@ def admin_logout(request):
 def view_doctors(request):
     departments = departmentdb.objects.all()
     doctors = doctordb.objects.all()
+    appn=appointmentdb.objects.count()
+
     return render(request,'Doctor_section.html',{'departments':departments,
-                                                'doctors':doctors})
+                                                'doctors':doctors,
+                                                'appn':appn})
 
 #show add doctors
 def doctor_list(request):
     doctors = doctordb.objects.all()
-    return render(request, "view_doctor.html", {"doctors": doctors})
+    appn=appointmentdb.objects.count()
+
+    return render(request, "view_doctor.html", {"doctors": doctors,
+                                                'appn':appn})
 
 #svae doctors
 def save_doctors(request):
@@ -169,7 +180,9 @@ def save_doctors(request):
 
 def view_departments(request):
     departments = departmentdb.objects.all()
-    return render(request,'department_section.html',{'departments':departments})
+    appn=appointmentdb.objects.count()
+    return render(request,'department_section.html',{'departments':departments,
+                                                    'appn':appn})
              
 
 #save deparrtment
@@ -295,3 +308,22 @@ def update_department(request,idd):
 
     
     return render(request, 'edit_department.html', {'department': department})
+
+
+    #appoiment lsit
+from userapp.models import *
+from django.utils import timezone
+
+def appoinment_list(request):
+    appointments = appointmentdb.objects.all().order_by('-date')
+
+    total_appointments = appointments.count()
+
+    today = timezone.now().date()
+    
+    return render(request,"ad_appoinments.html",
+    {
+        'appointments': appointments,
+        'total_appointments': total_appointments
+
+    })
