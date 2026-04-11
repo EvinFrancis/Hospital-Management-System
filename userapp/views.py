@@ -17,7 +17,24 @@ load_dotenv()
 # howm page user profile
 
 def user_profile(request):
-    return render(request,'home_page.html')
+    doctors=doctordb.objects.all()
+    #serach options
+     # Get search values
+    doctor_name = request.GET.get('doctor_name')
+    specialty = request.GET.get('specialty')
+
+    # Apply filters
+    if doctor_name:
+        doctors = doctordb.objects.filter(doc_name__icontains=doctor_name)
+
+    if specialty:
+        doctors = doctordb.objects.filter(doc_dpt__icontains=specialty)
+
+    context = {
+        'doctors': doctors,
+        
+    }
+    return render(request,'home_page.html',{'doc':doctors})
 
 def appointment_page(request):
     departments=departmentdb.objects.all()
@@ -240,3 +257,8 @@ def service_page(request):
 
 def contact_page(request):
     return render(request, "contact_page.html")
+
+
+
+
+

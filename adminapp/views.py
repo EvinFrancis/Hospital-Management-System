@@ -43,10 +43,10 @@ def admin_login(request):
     
         
 
-    if User.objects.filter(username__contains=username).exists():
+    if User.objects.filter(username__contains=username).exists(): # check if user exists
 
-        user=authenticate(request, username=username, password=password)
-        if user is not None and  user:
+        user=authenticate(request, username=username, password=password)# check if password is correct
+        if user is not None and  user:# if user exists and password is correct
             otp = random.randint(100000,999999)
 
             
