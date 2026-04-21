@@ -74,7 +74,8 @@
               <p class="mb-4">Have questions or want to learn more? Reach out to us and our team will get back to you
                 shortly.</p>
 
-              <form action="forms/contact.php" method="post" class="php-email-form">
+<form action="{% url 'contact' %}" method="post" class="php-email-form">
+    {% csrf_token %}
                 <div class="row g-4">
                   <div class="col-md-6">
                     <input type="text" class="form-control" name="name" id="name" placeholder="Your Name" required="">
@@ -96,10 +97,10 @@
                   </div>
 
                   <div class="col-12">
-                    <div class="loading">Loading</div>
-                    <div class="error-message"></div>
-                    <div class="sent-message">Your message has been sent. Thank you!</div>
-                  </div>
+                    
+{% if success %}
+<div class="sent-message">Your message has been sent. Thank you!</div>
+{% endif %}                  </div>
 
                   <div class="col-12">
                     <button type="submit" class="btn btn-submit">Send Message</button>

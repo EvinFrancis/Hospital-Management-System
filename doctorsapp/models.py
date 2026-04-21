@@ -16,7 +16,7 @@ class Attendance(models.Model):
         choices=[('Present', 'Present'), ('Absent', 'Absent')],
         default='Absent'
     )
-    qr_token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    qr_token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)#uuid4 is used to generate a unique identifier for each attendance record.  
     def __str__(self):
         return f"{self.doctor} - {self.date} - {self.status}"
     

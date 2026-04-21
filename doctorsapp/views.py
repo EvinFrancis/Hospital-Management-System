@@ -217,6 +217,8 @@ from django.utils import timezone
 
 def doctor_appointments(request):
     doctor_name = request.session.get('username')
+    doctor = doctordb.objects.filter(doc_name=doctor_name).first()
+
 
     appointments = appointmentdb.objects.filter(
         doctor=doctor_name
@@ -233,7 +235,8 @@ def doctor_appointments(request):
     return render(request, 'appoinments_doc.html', {
         'appointments': appointments,
         'today_appointments': today_appointments,
-        'total_appointments': total_appointments
+        'total_appointments': total_appointments,
+        'doctor': doctor
 
     })
     

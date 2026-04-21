@@ -256,8 +256,30 @@ def service_page(request):
 
 
 def contact_page(request):
+    
     return render(request, "contact_page.html")
 
+from django.shortcuts import render, redirect
+from .models import ContactMessage
+
+def contact_view(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        subject = request.POST.get("subject")
+        message = request.POST.get("message")
+
+        # Save to DB
+        ContactMessage.objects.create(
+            name=name,
+            email=email,
+            subject=subject,
+            message=message
+        )
+
+        return render(request, "contact.html", {"success": True})
+
+    return render(request, "contact.html")
 
 
 
