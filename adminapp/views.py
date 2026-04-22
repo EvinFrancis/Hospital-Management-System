@@ -24,6 +24,9 @@ def admin_page(request):
     total = attendances.count()
     absent = total - present
     appn=appointmentdb.objects.count()
+    mss=ContactMessage.objects.count()
+    
+
 
 
     return render(request, 'index.html',{'departments':departments,
@@ -31,7 +34,9 @@ def admin_page(request):
                                                 'attendances': attendances
                                                 ,'present': present,
         'absent': absent,
-        'appn':appn})
+        'appn':appn,
+        'mss':mss,
+        })
 
 def admin_loginpage(request):
     return render(request, 'admin_login_page.html')
@@ -327,3 +332,14 @@ def appoinment_list(request):
         'total_appointments': total_appointments
 
     })
+
+def message_list(request):
+    messages = ContactMessage.objects.all()
+    # messages = ContactMessage.objects.all().order_by('-created_at')[:5]  
+    today_messages = ContactMessage.objects.filter(created_at__date=timezone.now().date())
+    appn=appointmentdb.objects.count()
+
+
+    return render(request, 'messages.html', {'messages': messages
+                                             ,  'today_messages': today_messages,
+                                                'appn':appn})

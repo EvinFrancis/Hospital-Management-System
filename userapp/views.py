@@ -260,7 +260,7 @@ def contact_page(request):
     return render(request, "contact_page.html")
 
 from django.shortcuts import render, redirect
-from .models import ContactMessage
+from userapp.models import ContactMessage
 
 def contact_view(request):
     if request.method == "POST":
@@ -277,9 +277,9 @@ def contact_view(request):
             message=message
         )
 
-        return render(request, "contact.html", {"success": True})
+        
 
-    return render(request, "contact.html")
+    return redirect(contact_page)
 
 
 
